@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  NavLink
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -25,10 +26,11 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-br">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <Meta />
         <Links />
       </head>
@@ -42,7 +44,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <>
+      {/* Menu de navegação que é aplicado no site todo */}
+      <div className="MainNavBar bg-white dark:bg-gray-800 p-3 flex flex-row">
+        <NavLink to="/">
+          <img className="w-15 h-10" src="/favicon.ico" alt="Logotipo do SalveDoutor"></img>
+        </NavLink>
+        <div className="ml-3 flex flex-row">
+          <NavLink className="ml-3" to="/about">Sobre nós</NavLink>
+          <NavLink className="ml-3" to="/register">Cadastro</NavLink>
+          <NavLink className="ml-3" to="/login">Login</NavLink>
+        </div>
+      </div>
+      <Outlet />
+    </>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
