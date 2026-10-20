@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html,
+body {
+  @apply bg-white dark:bg-gray-950;
+
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+  .carrossel-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  overflow: hidden;
+}
+
+.carrossel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 16px;
+  padding-bottom: 10px;
+  scrollbar-width: none; /* Oculta a barra de rolagem no Firefox */
+}
+
+.carrossel::-webkit-scrollbar {
+  display: none; /* Oculta a barra de rolagem no Chrome, Safari e Edge */
+}
+
+.slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.slide img {
+  width: 100%;
+  display: block;
+  height: 300px;
+  object-fit: cover;
+}
+
+}
