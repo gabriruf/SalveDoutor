@@ -1,0 +1,1 @@
+"""Schemas de validação dos dados com Pydantic"""

@@ -1,0 +1,1 @@
+"""Arquivos gerais usadas por toda a aplicação"""
