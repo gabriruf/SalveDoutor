@@ -1,5 +1,5 @@
 import type { Route } from "./+types/home";
-import { Login } from "../pages/login";
+import { Register } from "../pages/register";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +9,5 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Login />; // ta usando a mesma página de login por que eu ainda não criei a página de cadastro.
+  return <Register />; 
 }

@@ -38,7 +38,7 @@ export function Login() {
                 </div>
                 <p className="text-[#005c92]">
                     <span>Ainda não tem uma conta?</span>&ensp;
-                    <a href="#" className="underline font-bold hover:text-[#0483c8]">Crie agora!</a>
+                    <a href="/register" className="underline font-bold hover:text-[#0483c8]">Crie agora!</a>
                 </p>
             </form>
 
