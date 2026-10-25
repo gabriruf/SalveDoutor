@@ -5,6 +5,17 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+@font-face {
+  font-family: 'PeaceSans';
+  src: url('/front-end/public/Font/Peace\ Sans\ Webfont.ttf') format('opentype');;
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  --font-peacesans: 'PeaceSans', sans-serif;
+}
+
 html,
 body {
   @apply bg-white dark:bg-gray-950;
