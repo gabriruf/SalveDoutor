@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:18
+    container_name: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - app-db-data:/var/lib/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${DB_USERNAME:?Variable not set}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:?Variable not set}
+      - POSTGRES_DB=${DB_NAME:?Variable not set}
+
+volumes:
+  app-db-data:
