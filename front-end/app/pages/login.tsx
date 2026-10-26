@@ -1,25 +1,24 @@
 export function Login() {
     return (
-        <div className="flex flex-row bg-white dark:bg-white">
-            <h2 className="font-sans font-bold text-5xl text-[#0d5887]">Precisando de ajuda?</h2>
-            <p className="font-sans text-[#0d5887]">Faça login para ser atendido</p>
-
-            <form className="flex flex-col ml-5">
-                <div className=" mt-5 mb-5">
-                    <label className=" ml-3 mb-1 font-sans text-[#0d5887]">E-mail</label>
-                    <input 
-                        className="flex flex-col w-120 border-2 p-2 ml-2 mr-2 rounded-4xl text-[#0d5887] border-[#6f9cca]"
-                        type="email"
-                    />
-                </div>
-
-                <div className="mt-5 mb-5">
-                    <label className="ml-3 font-sans text-[#0d5887]">Senha</label>
-                    <input
-                        className="flex flex-col w-120 border-2 p-2 ml-2 mr-2 rounded-4xl text-[#0d5887] border-[#6f9cca]"
-                        type="password"
-                    />
-                </div>
+        <div className="grid grid-cols-2 bg-white dark:bg-white max-h-fit">
+            <div className="flex flex-col justify-center">
+                <h2 className="font-sans font-bold text-5xl text-[#0d5887]">Precisando de ajuda?</h2>
+                <p className="font-sans text-[#0d5887]">Faça login para ser atendido</p>
+                <form className="flex flex-col ml-5">
+                    <div className=" mt-5 mb-5">
+                        <label className=" ml-3 mb-1 font-sans text-[#0d5887]">E-mail</label>
+                        <input
+                            className="flex flex-col w-120 border-2 p-2 ml-2 mr-2 rounded-4xl text-[#0d5887] border-[#6f9cca]"
+                            type="email"
+                        />
+                    </div>
+                    <div className="mt-5 mb-5">
+                        <label className="ml-3 font-sans text-[#0d5887]">Senha</label>
+                        <input
+                            className="flex flex-col w-120 border-2 p-2 ml-2 mr-2 rounded-4xl text-[#0d5887] border-[#6f9cca]"
+                            type="password"
+                        />
+                    </div>
                 
                 <div className="mt-5 mb-5">
                     <input
@@ -42,8 +41,8 @@ export function Login() {
                 </p>
             </form>
 
-            <div className="flex flex-row flex-1">
-                <img src="../artwork-login-cadastro.png" alt="" />
+            <div className="flex flex-row flex-1 overflow-hidden">
+                <img src="../artwork-login-cadastro.png" alt="" className="w-full h-full object-cover object-center"/>
             </div>
         </div>
     );
