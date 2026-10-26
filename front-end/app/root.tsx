@@ -10,6 +10,8 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { useState } from "react";
+import type { link } from "fs";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,19 +46,79 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const [menuAberto, setMenuAberto] = useState(false);
+  const links = [
+      { to: "/", icone: "/IconNavBar/home.png", texto: "Início" },
+      { to: "/1", icone: "/IconNavBar/consulta.png", texto: "Consultas" },
+      { to: "/1", icone: "/IconNavBar/exame.png", texto: "Exames" },
+      { to: "/1", icone: "/IconNavBar/telemedicina.png", texto: "Telemedicina" },
+    ];
+
+    const tanapagina = ({isActive}: {isActive: boolean}) =>
+      `flex flex-row items-center px-3 py-1 transition-colors ${
+        isActive
+          ? "text-[#005c92] font-bold border-b-2 border-[#005c92]"
+          : "text-gray-500 hover:text-[#005c92]"
+      }`;
+
   return (
     <>
-      {/* Menu de navegação que é aplicado no site todo */}
-      <div className="MainNavBar bg-white dark:bg-gray-800 p-3 flex flex-row">
-        <NavLink to="/">
-          <img className="w-15 h-10" src="/favicon.ico" alt="Logotipo do SalveDoutor"></img>
-        </NavLink>
-        <div className="ml-3 flex flex-row">
-          <NavLink className="ml-3" to="/about">Sobre nós</NavLink>
-          <NavLink className="ml-3" to="/register">Cadastro</NavLink>
-          <NavLink className="ml-3" to="/login">Login</NavLink>
-        </div>
-      </div>
+      <header className="bg-white dark:bg-gray-800 p-1 ">
+         <div className="MainNavBar bg-white dark:bg-gray-800 p-3 grid grid-cols-3 items-center">
+            {/* Logo */}
+            <div className="flex justify-self-start">
+              <img className = "w-12" src="/favicon.svg" alt="Logotipo do Salvedoutor"/>
+              <span className="ml-2  text-xl font-peacesans font-[1000] text-[#005c92] leading-tight">SALVE <br /> DOUTOR</span>
+            </div>
+            
+            {/* Links */}
+            <nav className="hidden md:flex flex-row justify-self-center">
+              {links.map((i) => (
+                  <NavLink key={i.to} to={i.to} end className={tanapagina}>
+                    <img className="mr-2 w-8 h-8" src={i.icone} alt="" />
+                    {i.texto}
+                  </NavLink>
+                ))
+              }
+            </nav>
+
+            {/* Notificação/Usuário/ */}
+            <div className="flex items-center gap-2 justify-self-end col-start-3">
+              <button type="button" className="flex flex-row items-center rounded-full" aria-label="menu">
+                <NavLink className={"flex flex-row items-center px-3 text-[#005c92]"} to="/login">
+                  <img className="w-8 h-8 mr-3" src="/IconNavBar/notificacao.png" alt="" />
+                  <img className="w-10 h-10 rounded-full" src="/IconNavBar/user.png" alt="" />
+                </NavLink>
+              </button>
+            {/* botão que não sei para que serve */}
+            <button
+                type="button"
+                onClick={() => setMenuAberto(!menuAberto)}
+                className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg text-[#005c92] hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                aria-controls="menu-mobile"
+                aria-expanded={menuAberto}
+              >
+                <span className="sr-only">Abrir menu principal</span>
+                <img className="w-6 sm-hidden sm:block" src="/IconNavBar/seta.png" alt="" />
+              </button>
+            </div>
+
+
+            </div>
+            
+            {/* Menu mobile */}
+            {menuAberto && (
+              <nav id="menuzin" className="md:hidden flex flex-col border-t border-gray-200 px-3 pb-3">
+              {links.map((i) => (
+                  <NavLink key={i.to} to={i.to} onClick={() => setMenuAberto(false)} className={"flex flex-row items-center px-3 text-[#005c92]"}>
+                    <img className="mr-2 w-8 h-8" src={i.icone} alt="" />
+                    {i.texto}
+                  </NavLink>
+                ))}
+            </nav>
+            )}
+
+      </header>
       <Outlet />
     </>
   );
