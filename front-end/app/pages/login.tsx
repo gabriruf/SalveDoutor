@@ -20,25 +20,26 @@ export function Login() {
                         />
                     </div>
                 
-                    <div className="mt-5 mb-5">
-                        <input
-                            className="ml-3 text-black"
-                            type="checkbox"
-                            name="show-password"
-                            id="show-password"
-                            value="Mostrar senha" />
-                        <label className="ml-3 text-[#0d5887]">Mostrar senha</label>
-                    </div>
-                    <a className="ml-3 underline text-[#005c92] font-bold hover:text-[#0483c8]" href="#">Esqueci minha senha</a>
-                    <div className="mt-5 mb-5">
-                        <button className="rounded-2xl w-120 pt-2 pb-2 pl-5 pr-5 bg-[#3aa2ff] hover:bg-[#308bdb] font-bold text-2xl text-white text-center uppercase">Entrar</button>
-                    </div>
-                    <p className="text-[#005c92]">
-                        <span>Ainda não tem uma conta?</span>&ensp;
-                        <a href="#" className="underline font-bold hover:text-[#0483c8]">Crie agora!</a>
-                    </p>
-                </form>
-            </div>
+                <div className="mt-5 mb-5">
+                    <input
+                        className="ml-3 text-black"
+                        type="checkbox"
+                        name="show-password"
+                        id="show-password"
+                        value="Mostrar senha" />
+                    <label className="ml-3 text-[#0d5887]">Mostrar senha</label>
+                </div>
+
+                <a className="ml-3 underline text-[#005c92] font-bold hover:text-[#0483c8]" href="#">Esqueci minha senha</a>
+
+                <div className="mt-5 mb-5">
+                    <button className="rounded-2xl w-120 pt-2 pb-2 pl-5 pr-5 bg-[#3aa2ff] hover:bg-[#308bdb] font-bold text-2xl text-white text-center uppercase">Entrar</button>
+                </div>
+                <p className="text-[#005c92]">
+                    <span>Ainda não tem uma conta?</span>&ensp;
+                    <a href="/register" className="underline font-bold hover:text-[#0483c8]">Crie agora!</a>
+                </p>
+            </form>
 
             <div className="flex flex-row flex-1 overflow-hidden">
                 <img src="../artwork-login-cadastro.png" alt="" className="w-full h-full object-cover object-center"/>
