@@ -3,5 +3,9 @@ name = "back-end"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
+    "alembic>=1.20.0",
     "fastapi[standard-no-fastapi-cloud-cli]>=0.143.0",
+    "phonenumbers>=9.0.41",
+    "psycopg>=3.3.6",
+    "sqlalchemy>=2.1.4",
 ]
