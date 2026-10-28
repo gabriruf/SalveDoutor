@@ -17,10 +17,12 @@ class UserBase(BaseModel):
     phone: BrazilPhoneFormat = Field(min_length=15, max_length=15)
     access_type: AccessType = Field(default=AccessType.PACIENTE)
     area_atuacao: str | None = Field(max_length=30, default=None)
+    crm_id: str | None = Field(max_length=9, default=None)
+
+    # implementar validador que checa se o tipo de acesso é de médico para tornar os campos area_atuacao e crm_id necessários
 
 class User(UserBase):
     id: uuid.UUID | None
-    crm_id: str | None = Field(max_length=9, default=None)
     password: str = Field(min_length=12, max_length=100)
     created_at: datetime
     updated_at: datetime
