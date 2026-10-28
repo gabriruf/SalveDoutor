@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     db_username: SecretStr = SecretStr("x")
     db_password: SecretStr = SecretStr("x")
     db_url: str = ""
+    api_token: SecretStr = SecretStr("") # oauth2 api token
+
+    secret_key: SecretStr = SecretStr("secret key") # jwt
 
 
 @lru_cache
