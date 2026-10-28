@@ -7,7 +7,7 @@
 
 @font-face {
   font-family: 'PeaceSans';
-  src: url('/front-end/public/Font/Peace\ Sans\ Webfont.ttf') format('opentype');;
+  src: url('Font/Peace\ Sans\ Webfont.ttf') format('opentype');;
   font-weight: normal;
   font-style: normal;
 }
