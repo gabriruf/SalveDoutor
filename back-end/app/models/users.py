@@ -17,7 +17,7 @@ class User(Base):
     last_name: Mapped[str] = mapped_column(String(60))
     birth_date: Mapped[date] = mapped_column(Date)
     email: Mapped[str] = mapped_column(String(255), unique=True)
-    password: Mapped[str] = mapped_column(String(100))
+    password: Mapped[str] = mapped_column(String(255))
     phone: Mapped[str] = mapped_column(String(15), unique=True)
     access_type: Mapped[AccessType] = mapped_column(
         Enum(

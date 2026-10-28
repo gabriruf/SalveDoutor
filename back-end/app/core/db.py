@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine, Column, URL, text
-from sqlalchemy.orm import sessionmaker, Session, DeclarativeBase
+from sqlalchemy import create_engine, URL
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from core.config import Settings
 
 class Base(DeclarativeBase):

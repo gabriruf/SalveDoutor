@@ -1,7 +1,6 @@
-from pydantic import PostgresDsn, Field, SecretStr
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from functools import lru_cache
-from typing import Annotated
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -15,6 +14,9 @@ class Settings(BaseSettings):
     db_username: SecretStr = SecretStr("x")
     db_password: SecretStr = SecretStr("x")
     db_url: str = ""
+    api_token: SecretStr = SecretStr("") # oauth2 api token
+
+    secret_key: SecretStr = SecretStr("secret key") # jwt
 
 
 @lru_cache
