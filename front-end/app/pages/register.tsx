@@ -4,7 +4,7 @@ import { Link } from "react-router";
 function validaCPF(cpf: string): boolean {
     cpf = cpf.replace(/\D+/g, "");
     if (cpf.length !== 11) return false;
-    if (/^(\d)\1{10}$/.test(cpf)) return false; // sequências iguais
+    if (/^(\d)\1{10}$/.test(cpf)) return false;
 
     let soma = 0;
     let resto: number;
@@ -24,7 +24,6 @@ function validaCPF(cpf: string): boolean {
 }
 
 function validaData(valor: string): string {
-    // devolve "" se estiver válida, ou a mensagem de erro
     const partes = valor.split("/");
     if (partes.length !== 3 || valor.length !== 10) return "Data inválida. Use o formato DD/MM/AAAA.";
 
@@ -34,7 +33,6 @@ function validaData(valor: string): string {
 
     if (ano < 1900) return "Data inválida.";
 
-    // cria a data e confere se o JS não "corrigiu" algo (ex.: 31/02 vira 03/03)
     const data = new Date(ano, mes - 1, dia);
     const existe =
         data.getFullYear() === ano &&
@@ -57,31 +55,43 @@ function validaSenha(senha: string): string {
     return "";
 }
 
+function formataCRM(valor: string): string {
+    return valor
+        .toUpperCase() 
+        .replace(/[^0-9A-Z]/g, "")
+        .slice(0, 8)
+        .replace(/^(\d{1,6})([A-Z]{0,2})$/, "$1/$2");
+}
+
 export function Register() {
+    const [tipoUsuario, setTipoUsuario] = useState("");
     const [erroCpf, setErroCpf] = useState("");
+    const [erroCrm, setErroCrm] = useState("");
     const [erroData, setErroData] = useState("");
     const [erroSenha, setErroSenha] = useState("");
     const [mostrarSenha, setMostrarSenha] = useState(false);
 
-
-        const aoEnviar = (e: React.FormEvent<HTMLFormElement>) => {
+    const aoEnviar = (e: React.FormEvent<HTMLFormElement>) => {
         const dados = new FormData(e.currentTarget);
-        const cpf = dados.get("cpf") as string;
         const nascimento = dados.get("nascimento") as string;
         const senha = dados.get("senha") as string;
 
         const msgData = validaData(nascimento);
-        const cpfOk = validaCPF(cpf);
         const msgSenha = validaSenha(senha);
+        
+        let cpfOk = true;
+        if (tipoUsuario === "paciente") {
+            const cpf = dados.get("cpf") as string;
+            cpfOk = validaCPF(cpf);
+            setErroCpf(cpfOk ? "" : "CPF inválido. Verifique o número digitado.");
+        }
 
         setErroData(msgData);
-        setErroCpf(cpfOk ? "" : "CPF inválido. Verifique o número digitado.");
         setErroSenha(msgSenha);
 
-       if (msgData || !cpfOk || msgSenha) {
-            e.preventDefault(); // impede o envio
-            // foca no primeiro campo com erro
-            const primeiroErro = msgData ? "nascimento" : !cpfOk ? "cpf" : "senha";
+        if (msgData || (tipoUsuario === "paciente" && !cpfOk) || msgSenha) {
+            e.preventDefault();
+            const primeiroErro = msgData ? "nascimento" : (tipoUsuario === "paciente" && !cpfOk) ? "cpf" : "senha";
             document.getElementById(primeiroErro)?.focus();
         }
     };
@@ -100,21 +110,27 @@ export function Register() {
 
                 <form className="flex flex-col ml-3" onSubmit={aoEnviar}>
                     <div className="mt-4">
-                        <label htmlFor="nome" className="ml-3 mb-1 block font-sans text-sm text-[#0d5887]">Nome</label>
-                        <input
-                            id="nome"
-                            name="nome"
-                            type="text"
-                            className="w-full max-w-100 border-2 p-2 rounded-2xl text-[#0d5887] border-[#3aa2ff] outline-none focus:border-[#0483c8]"
-                            required
-                        />
+                        <label htmlFor="tipoUsuario" className="ml-3 mb-1 block font-sans text-sm text-[#0d5887]">
+                            Você é
+                        </label>
+                        <select 
+                            id="tipoUsuario"
+                            name="tipoUsuario" 
+                            value={tipoUsuario}
+                            onChange={(e) => setTipoUsuario(e.target.value)}
+                            required 
+                            className="w-full max-w-100 border-2 p-2 rounded-2xl text-[#0d5887] border-[#3aa2ff] outline-none focus:border-[#0483c8] bg-white">
+                            <option value="" disabled>---Selecione uma opção---</option>
+                            <option value="doutor">Doutor</option>
+                            <option value="paciente">Paciente</option>
+                        </select>
                     </div>
 
                     <div className="mt-4">
-                        <label htmlFor="sobrenome" className="ml-3 mb-1 block font-sans text-sm text-[#0d5887]">Sobrenome</label>
+                        <label htmlFor="nome" className="ml-3 mb-1 block font-sans text-sm text-[#0d5887]">Nome Completo</label>
                         <input
-                            id="sobrenome"
-                            name="sobrenome"
+                            id="nome"
+                            name="nome"
                             type="text"
                             className="w-full max-w-100 border-2 p-2 rounded-2xl text-[#0d5887] border-[#3aa2ff] outline-none focus:border-[#0483c8]"
                             required
@@ -136,10 +152,9 @@ export function Register() {
                                     .slice(0, 8)
                                     .replace(/^(\d{2})(\d)/, "$1/$2")
                                     .replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
-                                if (erroData) setErroData(""); // limpa o erro enquanto digita
+                                if (erroData) setErroData("");
                             }}
                             onBlur={(e) => {
-                                // valida ao sair do campo (só se tiver algo digitado)
                                 if (e.currentTarget.value) setErroData(validaData(e.currentTarget.value));
                             }}
                             aria-invalid={!!erroData}
@@ -153,40 +168,59 @@ export function Register() {
                         {erroData && <p className="ml-3 mt-1 text-sm text-red-500">{erroData}</p>}
                     </div>
 
-                    <div className="mt-4">
-                        <label htmlFor="cpf" className="ml-3 mb-1 block font-sans text-sm text-[#0d5887]">CPF</label>
-                        <input
-                            id="cpf"
-                            name="cpf"
-                            type="text"
-                            inputMode="numeric"
-                            placeholder="999.999.999-99"
-                            maxLength={14}
-                            onInput={(e) => {
-                                e.currentTarget.value = e.currentTarget.value
-                                    .replace(/\D/g, "")
-                                    .slice(0, 11)
-                                    .replace(/^(\d{3})(\d)/, "$1.$2")
-                                    .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
-                                    .replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
-                                if (erroCpf) setErroCpf(""); // limpa o erro enquanto digita
-                            }}
-                            onBlur={(e) => {
-                                // valida ao sair do campo (só se tiver algo digitado)
-                                if (e.currentTarget.value && !validaCPF(e.currentTarget.value)) {
-                                    setErroCpf("CPF inválido. Verifique o número digitado.");
-                                }
-                            }}
-                            aria-invalid={!!erroCpf}
-                            className={`w-full max-w-100 border-2 p-2 rounded-2xl text-[#0d5887] outline-none ${
-                                erroCpf
-                                    ? "border-red-500 focus:border-red-500"
-                                    : "border-[#3aa2ff] focus:border-[#0483c8]"
-                            }`}
-                            required
-                        />
-                        {erroCpf && <p className="ml-3 mt-1 text-sm text-red-500">{erroCpf}</p>}
-                    </div>
+                    {tipoUsuario === "paciente" && (
+                        <div className="mt-4">
+                            <label htmlFor="cpf" className="ml-3 mb-1 block font-sans text-sm text-[#0d5887]">CPF</label>
+                            <input
+                                id="cpf"
+                                name="cpf"
+                                type="text"
+                                inputMode="numeric"
+                                placeholder="999.999.999-99"
+                                maxLength={14}
+                                onInput={(e) => {
+                                    e.currentTarget.value = e.currentTarget.value
+                                        .replace(/\D/g, "")
+                                        .slice(0, 11)
+                                        .replace(/^(\d{3})(\d)/, "$1.$2")
+                                        .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+                                        .replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
+                                    if (erroCpf) setErroCpf("");
+                                }}
+                                onBlur={(e) => {
+                                    if (e.currentTarget.value && !validaCPF(e.currentTarget.value)) {
+                                        setErroCpf("CPF inválido. Verifique o número digitado.");
+                                    }
+                                }}
+                                aria-invalid={!!erroCpf}
+                                className={`w-full max-w-100 border-2 p-2 rounded-2xl text-[#0d5887] outline-none ${
+                                    erroCpf
+                                        ? "border-red-500 focus:border-red-500"
+                                        : "border-[#3aa2ff] focus:border-[#0483c8]"
+                                }`}
+                                required
+                            />
+                            {erroCpf && <p className="ml-3 mt-1 text-sm text-red-500">{erroCpf}</p>}
+                        </div>
+                    )}
+
+                    {tipoUsuario === "doutor" && (
+                        <div className="mt-4">
+                            <label htmlFor="crm" className="ml-3 mb-1 block font-sans text-sm text-[#0d5887]">CRM</label>
+                            <input
+                                id="crm"
+                                name="crm"
+                                type="text"
+                                placeholder="123456/SP"
+                                maxLength={10}
+                                onInput={(e) => {
+                                    e.currentTarget.value = formataCRM(e.currentTarget.value);
+                                }}
+                                className="w-full max-w-100 border-2 p-2 rounded-2xl text-[#0d5887] outline-none border-[#3aa2ff] focus:border-[#0483c8]"
+                                required
+                            />
+                        </div>
+                    )}
 
                     <div className="mt-4">
                         <label htmlFor="email" className="ml-3 mb-1 block font-sans text-sm text-[#0d5887]">E-mail</label>
@@ -228,10 +262,9 @@ export function Register() {
                             name="senha"
                             type={mostrarSenha ? "text" : "password"}
                             onInput={() => {
-                                if (erroSenha) setErroSenha(""); // limpa o erro enquanto digita
+                                if (erroSenha) setErroSenha(""); 
                             }}
                             onBlur={(e) => {
-                                // valida ao sair do campo (só se tiver algo digitado)
                                 if (e.currentTarget.value) setErroSenha(validaSenha(e.currentTarget.value));
                             }}
                             aria-invalid={!!erroSenha}
@@ -274,7 +307,6 @@ export function Register() {
                 </form>
             </div>
 
-            {/* Coluna direita: arte */}
             <div className="hidden lg:flex flex-1 bg-[#ccfaff]">
                 <img
                     src="/artwork-login-cadastro.png"
